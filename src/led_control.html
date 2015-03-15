@@ -1,0 +1,55 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta http-equiv='Content-Type' content='text/html; charset=utf-8'>
+<meta name='viewport' content='width=device-width, initial-scale=1.0'>
+<title>control arduino led</title>
+<link rel="stylesheet" href="http://s3.url2io.com/arduino/css/switch.css" />
+</head>
+<body>
+<div class='mm'><div class='toggle' id='switch'>
+  <div class='toggle-text-off'>OFF</div>
+  <div class='glow-comp'></div>
+  <div class='toggle-button'></div>
+  <div class='toggle-text-on'>ON</div>
+</div></div>
+<script type="text/javascript" src="http://xpx.droprest.com/assets/js/jquery-1.9.1.min.js"></script>
+<script type="text/javascript">
+function turn(action) {
+  var elem = document.getElementsByClassName('toggle')[0];
+  if (action=='on') {
+    elem.className = 'toggle toggle-on';
+  }
+  else if (action=='off') {
+    elem.className = 'toggle';
+  }
+}
+document.getElementsByClassName('toggle')[0].onclick = function() {
+  if (this.className == 'toggle') {
+    $.ajax({
+      'type': 'get',
+      'url': '/on',
+      'success': function(data) {turn('on');}
+    });
+  }
+  else {
+    $.ajax({
+      'type': 'get',
+      'url': '/off',
+      'success': function(data) {turn('off')}
+    });
+  }
+}
+$(document).ready(function() {
+  var toggle = document.getElementsByClassName('toggle')[0];
+  $.ajax({
+    'type': 'get',
+    'url': '/status',
+    'success': function(data) {
+      turn(data['status']);
+    }
+  });
+});
+</script>
+</body>
+</html>
